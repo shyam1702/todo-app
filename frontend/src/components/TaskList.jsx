@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 
-function TaskList() {
-  const [tasks, setTasks] = useState([]);
-
-  // Fetch tasks from backend
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/tasks")
-      .then((response) => {
-        setTasks(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching tasks:", error);
-      });
-  }, []);
-
+function TaskList({ tasks, toggleComplete, deleteTask }) {
   return (
-    <div>
-      <h2>Your Tasks</h2>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            {task.title} {task.completed ? "✅" : "❌"}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="task-list">
+      {tasks.map((task) => (
+        <li key={task.id} className="task-item">
+          <span
+            className="task-title"
+            onClick={() => toggleComplete(task)}
+            style={{
+              textDecoration: task.completed ? "line-through" : "none",
+            }}
+          >
+            {task.title}
+          </span>
+          <button className="delete-btn" onClick={() => deleteTask(task.id)}>
+            🗑
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
